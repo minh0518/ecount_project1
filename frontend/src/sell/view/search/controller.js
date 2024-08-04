@@ -1,34 +1,84 @@
-import { item_data } from '../../data/data.js';
 import { events } from './event.js';
 import { getSearchDataApi } from './service/get.js';
 
-// 상태
-let currentPage = 1;
+// # state
 
-// 상태 가져오기
-function getCurrentPage() {
-  return currentPage;
+// 현재 페이지
+let currentPageNumberState = 1;
+// 전체 페이지 개수
+let totalPageCountState = 1;
+// 현재 input
+let inputState = {
+  code: '',
+  name: '',
+};
+
+function getInputState() {
+  return inputState;
+}
+function setInputState(newInputState) {
+  inputState = {
+    ...newInputState,
+  };
+  const totalCount = getSearchDataApi.getDataLength(inputState.code, inputState.name);
+  const pageCount = totalCount % 10 === 0 ? Math.floor(totalCount / 10) : Math.floor(totalCount / 10) + 1;
+
+  // 전체 리렌더링
+  setTotalPageCountState(pageCount);
+  setCurrentPageNumberState(1);
 }
 
-// 상태 업데이트(리렌더링 포함)
-function setCurrentPage(targetPageNumber, pageCount) {
-  currentPage = targetPageNumber; // 업데이트
+function getTotalPageCountState() {
+  return totalPageCountState;
+}
+function setTotalPageCountState(targetValue) {
+  totalPageCountState = targetValue;
+  renderPageButtons();
+}
 
-  // 업데이트된 state를 기반으로 페이지 계산,
-  // 해당 페이지에 해당하는 데이터 패칭
-  // (=useEffect 콜백)
-  if (currentPage > pageCount) currentPage = pageCount;
-  if (currentPage <= 0) currentPage = 1;
-  const startOffset = (currentPage - 1) * 10;
+function getCurrentPageNumberState() {
+  return currentPageNumberState;
+}
+
+function setCurrentPageNumberState(targetPageNumber) {
+  const toalPageCount = getTotalPageCountState();
+  const inputState = getInputState();
+
+  currentPageNumberState = targetPageNumber;
+
+  if (currentPageNumberState > toalPageCount) currentPageNumberState = toalPageCount;
+  if (currentPageNumberState <= 0) currentPageNumberState = 1;
+  const startOffset = (currentPageNumberState - 1) * 10;
   const endOffset = startOffset + 10;
-  const currentPageData = getSearchDataApi.getDataList(startOffset, endOffset);
+  const currentPageStateData = getSearchDataApi.getDataList(inputState.code, inputState.name, startOffset, endOffset);
 
-  // 리렌더링
-  render(currentPageData);
+  renderTable(currentPageStateData);
 }
 
-// 리렌더링 함수 (현재 페이지에 해당하는 데이터를 테이블에 추가)
-export const render = (currentPageData) => {
+// # 렌더링
+export const renderPageButtons = () => {
+  const toalPageCount = getTotalPageCountState();
+  const pageButtons = document.querySelector('.pageButtons');
+  pageButtons.innerHTML = '';
+
+  // 1페이지 : slice index 0~9
+  let currentPage = 1;
+  while (currentPage <= toalPageCount) {
+    let page = currentPage; // 클로저 방지
+
+    const singlePageButton = document.createElement('button');
+    singlePageButton.innerText = currentPage;
+
+    singlePageButton.addEventListener('click', () => {
+      setCurrentPageNumberState(page);
+    });
+    pageButtons.appendChild(singlePageButton);
+
+    currentPage += 1;
+  }
+};
+
+export const renderTable = (currentPageData) => {
   const tbody = document.querySelector('.tbody');
 
   tbody.innerHTML = '';
@@ -45,21 +95,21 @@ export const render = (currentPageData) => {
   }
 };
 
+// 메인 로직
 document.addEventListener('DOMContentLoaded', () => {
-  const totalCount = item_data.length;
+  const totalCount = getSearchDataApi.getDataLength('', '');
   const pageCount = totalCount % 10 === 0 ? Math.floor(totalCount / 10) : Math.floor(totalCount / 10) + 1;
 
-  // 첫페이지 테이블 세팅
-  const currentPageData = getSearchDataApi.getDataList(0, 10);
-  render(currentPageData);
+  // 페이지네이션 버튼 세팅
+  setTotalPageCountState(pageCount);
 
-  // 페이지네이션 버튼 이벤트
-  events.pageButtons(pageCount);
+  // 첫페이지 테이블 세팅
+  setCurrentPageNumberState(1);
 
   // 이전, 다음 버튼 이벤트
-  events.moveButton('left', getCurrentPage, setCurrentPage, pageCount);
-  events.moveButton('right', getCurrentPage, setCurrentPage, pageCount);
+  events.moveButton('left', getCurrentPageNumberState, setCurrentPageNumberState);
+  events.moveButton('right', getCurrentPageNumberState, setCurrentPageNumberState);
 
   // 검색 이벤트
-  // events.search();
+  events.search(setInputState);
 });

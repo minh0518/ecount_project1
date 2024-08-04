@@ -1,6 +1,6 @@
-export const sell_item_data = [
+export const item_data = [
   {
-    date: new Date(`2023-04-06`),
+    date: `2023-04-06`,
     code: 'P100001',
     name: '품목1',
     count: 4,
@@ -8,7 +8,7 @@ export const sell_item_data = [
     description: '테스트',
   },
   {
-    date: new Date(`2023-04-23`),
+    date: `2023-04-23`,
     code: 'P100002',
     name: '품목2',
     count: 6,
@@ -16,7 +16,7 @@ export const sell_item_data = [
     description: '테스트',
   },
   {
-    date: new Date(`2024-07-21`),
+    date: `2024-07-21`,
     code: 'P100003',
     name: '품목3',
     count: 1,
@@ -24,7 +24,7 @@ export const sell_item_data = [
     description: '',
   },
   {
-    date: new Date(`2024-08-11`),
+    date: `2024-08-11`,
     code: 'P100004',
     name: '품목4',
     count: 2,
@@ -32,7 +32,7 @@ export const sell_item_data = [
     description: '',
   },
   {
-    date: new Date('2023-05-12'),
+    date: '2023-05-12',
     code: 'P100123',
     name: '품목2',
     count: 7,
@@ -40,7 +40,7 @@ export const sell_item_data = [
     description: '테스트2',
   },
   {
-    date: new Date('2023-06-18'),
+    date: '2023-06-18',
     code: 'P100456',
     name: '품목3',
     count: 10,
@@ -48,7 +48,7 @@ export const sell_item_data = [
     description: '테스트3',
   },
   {
-    date: new Date('2023-07-24'),
+    date: '2023-07-24',
     code: 'P100789',
     name: '품목4',
     count: 2,
@@ -56,7 +56,7 @@ export const sell_item_data = [
     description: '테스트4',
   },
   {
-    date: new Date('2023-08-30'),
+    date: '2023-08-30',
     code: 'P101234',
     name: '품목5',
     count: 5,
@@ -64,7 +64,7 @@ export const sell_item_data = [
     description: '테스트5',
   },
   {
-    date: new Date('2023-09-05'),
+    date: '2023-09-05',
     code: 'P101567',
     name: '품목6',
     count: 3,
@@ -72,7 +72,7 @@ export const sell_item_data = [
     description: '테스트6',
   },
   {
-    date: new Date('2023-06-18'),
+    date: '2023-06-18',
     code: 'P100456',
     name: '품목3',
     count: 10,
@@ -80,7 +80,7 @@ export const sell_item_data = [
     description: '테스트3',
   },
   {
-    date: new Date('2023-07-24'),
+    date: '2023-07-24',
     code: 'P100789',
     name: '품목4',
     count: 2,
@@ -88,7 +88,7 @@ export const sell_item_data = [
     description: '테스트4',
   },
   {
-    date: new Date('2023-08-30'),
+    date: '2023-08-30',
     code: 'P101234',
     name: '품목5',
     count: 5,
@@ -96,7 +96,7 @@ export const sell_item_data = [
     description: '테스트5',
   },
   {
-    date: new Date('2023-09-05'),
+    date: '2023-09-05',
     code: 'P101567',
     name: '품목6',
     count: 3,
@@ -104,7 +104,7 @@ export const sell_item_data = [
     description: '테스트6',
   },
   {
-    date: new Date('2023-10-11'),
+    date: '2023-10-11',
     code: 'P101890',
     name: '품목7',
     count: 8,
@@ -112,7 +112,7 @@ export const sell_item_data = [
     description: '테스트7',
   },
   {
-    date: new Date('2023-11-17'),
+    date: '2023-11-17',
     code: 'P102213',
     name: '품목8',
     count: 6,
@@ -120,7 +120,7 @@ export const sell_item_data = [
     description: '테스트8',
   },
   {
-    date: new Date('2023-12-23'),
+    date: '2023-12-23',
     code: 'P102546',
     name: '품목9',
     count: 12,
@@ -128,7 +128,7 @@ export const sell_item_data = [
     description: '테스트9',
   },
   {
-    date: new Date('2024-01-28'),
+    date: '2024-01-28',
     code: 'P102879',
     name: '품목10',
     count: 11,
@@ -136,7 +136,7 @@ export const sell_item_data = [
     description: '테스트10',
   },
   {
-    date: new Date('2024-02-03'),
+    date: '2024-02-03',
     code: 'P103212',
     name: '품목11',
     count: 9,
@@ -144,7 +144,7 @@ export const sell_item_data = [
     description: '테스트11',
   },
   {
-    date: new Date('2024-03-09'),
+    date: '2024-03-09',
     code: 'P103545',
     name: '품목12',
     count: 15,
@@ -152,7 +152,7 @@ export const sell_item_data = [
     description: '테스트12',
   },
   {
-    date: new Date('2024-04-14'),
+    date: '2024-04-14',
     code: 'P103878',
     name: '품목13',
     count: 1,
@@ -160,7 +160,7 @@ export const sell_item_data = [
     description: '테스트13',
   },
   {
-    date: new Date('2024-05-20'),
+    date: '2024-05-20',
     code: 'P104211',
     name: '품목14',
     count: 13,
@@ -168,7 +168,7 @@ export const sell_item_data = [
     description: '테스트14',
   },
   {
-    date: new Date('2024-06-26'),
+    date: '2024-06-26',
     code: 'P104544',
     name: '품목15',
     count: 14,
@@ -176,7 +176,7 @@ export const sell_item_data = [
     description: '테스트15',
   },
   {
-    date: new Date('2024-07-31'),
+    date: '2024-07-31',
     code: 'P104877',
     name: '품목16',
     count: 3,

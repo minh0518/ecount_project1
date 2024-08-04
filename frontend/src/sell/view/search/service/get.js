@@ -1,38 +1,37 @@
 export const getSearchDataApi = {
-  getDataLength: (searchCode, searchName) => {
-    const item_data = JSON.parse(localStorage.getItem('item_data'));
-    const queryData = [];
-    for (let { code, name } of item_data) {
-      if ((searchCode === '' || searchCode === code) && (searchName === '' || searchName === name)) {
-        queryData.push({ code, name });
-      }
-    }
-    return queryData.length;
+  getDataLength: () => {
+    const sell_item_data = JSON.parse(localStorage.getItem('sell_item_data'));
+    return sell_item_data.length;
   },
-  getDataList: (searchCode, searchName, startOffset, endOffset) => {
-    // fetch 변경 예정
-    const item_data = JSON.parse(localStorage.getItem('item_data'));
+  getDataList: (startOffset, endOffset, startDate, endDate, searchValues) => {
+    // startDate : { startYear:2023, startMonth:4, startDay:2 }
+    // endDate : { endYear:2024, endMonth:12, endDay:5 }
+    // searchValues : ['P100003','P100005','P100004']
 
-    // searchCode: "P100003,P100004,P100005"
-    if (searchCode === '' && searchName === '') {
-      return item_data.slice(startOffset, endOffset);
-    }
+    const sell_item_data = JSON.parse(localStorage.getItem('sell_item_data'));
+    // return sell_item_data.slice(startOffset, endOffset);
 
-    const searchCodeArr = searchCode.split(',');
-    const queryData = [];
-    for (let { code, name } of item_data) {
-      if ((searchCode === '' || searchCodeArr.includes(code)) && (searchName === '' || searchName === name)) {
-        queryData.push({ code, name });
-      }
-    }
-    return queryData.slice(startOffset, endOffset);
+    console.log(startDate, endDate, searchValues);
+    const start = new Date(startDate.startYear, startDate.startMonth - 1, startDate.startDay);
+    const end = new Date(endDate.endYear, endDate.endMonth - 1, endDate.endDay);
+
+    const filteredData = sell_item_data.filter((item) => {
+      const itemDate = new Date(item.date);
+      const isInRange = itemDate >= start && itemDate <= end;
+      const isInSearchValues = searchValues.length === 0 || searchValues.includes(item.code);
+
+      return isInRange && isInSearchValues;
+    });
+
+    console.log(filteredData);
+    return filteredData.slice(startOffset, endOffset);
   },
 
   getSearchList: (searchCode, searchName) => {
     // fetch 변경 예정
-    const item_data = JSON.parse(localStorage.getItem('item_data'));
+    const sell_item_data = JSON.parse(localStorage.getItem('sell_item_data'));
     const response = [];
-    for (let { code, name } of item_data) {
+    for (let { code, name } of sell_item_data) {
       if (code === searchCode && name === searchName) {
         response.push({ code, name });
       }

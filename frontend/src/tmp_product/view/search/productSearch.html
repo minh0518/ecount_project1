@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./sellSearch.module.css" />
+    <link rel="stylesheet" href="./productSearch.module.css" />
     <title>Document</title>
   </head>
   <body>
@@ -14,24 +14,30 @@
           <div class="date">
             <p class="category">전표 일자</p>
             <div class="dateInput">
-              <select id="startYear"></select
+              <select>
+                <option>2023</option></select
               >/
-              <select id="startMonth"></select
+              <select>
+                <option>10</option></select
               >/
-              <select id="startDay"></select>
+              <select>
+                <option>08</option>
+              </select>
               ~
-              <select id="endYear"></select
+              <select>
+                <option>2023</option></select
               >/
-              <select id="endMonth"></select
+              <select>
+                <option>12</option></select
               >/
-              <select id="endDay"></select>
+              <select>
+                <option>07</option>
+              </select>
             </div>
           </div>
-
           <div class="name">
             <p class="category">품목</p>
             <input class="nameInput" placeholder="품목" />
-            <div class="nameList"></div>
           </div>
           <div class="description">
             <p class="category">적요</p>
@@ -43,8 +49,8 @@
         </div>
         <div class="bottom">
           <div class="controlButtons">
-            <button class="leftButton">&lt; &nbsp; 이전</button>
-            <button class="rightButton">다음 &nbsp; &gt;</button>
+            <button>&lt; &nbsp; 이전</button>
+            <button>다음 &nbsp; &gt;</button>
           </div>
           <div class="resultTable">
             <table>
@@ -59,8 +65,8 @@
                   <th>적요</th>
                 </tr>
               </thead>
-              <tbody class="tbody">
-                <!-- <tr>
+              <tbody>
+                <tr>
                   <td><input type="checkbox" /></td>
                   <td>2023/01/10-3</td>
                   <td>P100001</td>
@@ -68,7 +74,34 @@
                   <td>10</td>
                   <td>2,000</td>
                   <td>zzzzz</td>
-                </tr> -->
+                </tr>
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>2023/01/10-3</td>
+                  <td>P100001</td>
+                  <td>진라면</td>
+                  <td>10</td>
+                  <td>2,000</td>
+                  <td>zzzzz</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>2023/01/10-3</td>
+                  <td>P100001</td>
+                  <td>진라면</td>
+                  <td>10</td>
+                  <td>2,000</td>
+                  <td>zzzzz</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>2023/01/10-3</td>
+                  <td>P100001</td>
+                  <td>진라면</td>
+                  <td>10</td>
+                  <td>2,000</td>
+                  <td>zzzzz</td>
+                </tr>
               </tbody>
             </table>
           </div>

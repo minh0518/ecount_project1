@@ -1,6 +1,3 @@
-import { renderTable } from './controller.js';
-import { getSearchDataApi } from './service/get.js';
-
 export const events = {
   moveButton: (direction, getCurrentPageNumberState, setCurrentPageNumberState) => {
     const controlButtons = document.querySelector('.controlButtons').children;
@@ -21,7 +18,7 @@ export const events = {
     }
   },
 
-  search: (setInputState) => {
+  search: (setInputState, setCheckedState) => {
     const searchButton = document.querySelector('.searchButton');
     searchButton.addEventListener('click', () => {
       const codeInput = document.querySelector('.codeInput').value;
@@ -32,6 +29,25 @@ export const events = {
         name: nameInput,
       };
       setInputState(newInputState);
+      setCheckedState(codeInput.length === 0 ? [] : codeInput.split(','));
+    });
+  },
+
+  apply: (getCheckedState, renderInput) => {
+    const applyButton = document.querySelector('.apply');
+    applyButton.addEventListener('click', () => {
+      if (getCheckedState().length === 0) {
+        alert('체크된 항목이 없습니다');
+        return;
+      }
+      renderInput();
+    });
+  },
+
+  new: () => {
+    const newButton = document.querySelector('.new');
+    newButton.addEventListener('click', () => {
+      window.open(`../add/sellAdd.html?mode=new`, 'modalWindow', 'width=500,height=300');
     });
   },
 };

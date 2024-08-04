@@ -1,5 +1,6 @@
 import { events } from './event.js';
 import { getSearchDataApi } from './service/get.js';
+import { item_data } from '../../data/data.js';
 
 // # state
 
@@ -12,6 +13,8 @@ let inputState = {
   code: '',
   name: '',
 };
+// 체크박스
+let checkedState = [];
 
 function getInputState() {
   return inputState;
@@ -55,6 +58,15 @@ function setCurrentPageNumberState(targetPageNumber) {
   renderTable(currentPageStateData);
 }
 
+function getCheckedState() {
+  return checkedState;
+}
+function setCheckedState(newCheckedState) {
+  checkedState = newCheckedState;
+
+  renderCheckBox();
+}
+
 // # 렌더링
 export const renderPageButtons = () => {
   const toalPageCount = getTotalPageCountState();
@@ -85,18 +97,71 @@ export const renderTable = (currentPageData) => {
   for (let { code, name } of currentPageData) {
     const newTr = document.createElement('tr');
     const htmlSting = `
-                <td><input type="checkbox"/></td>
-                <td>${code}</td>
-                <td>${name}</td>
-                <td>수정</td>
+                <td><input type="checkbox" class="checkbox"/></td>
+                <td><button class="codeButton">${code}</button></td>
+                <td id="product_${name}">${name}</td>
+                <td><button class="editButton">수정</button></td>
               `;
     newTr.innerHTML = htmlSting;
     tbody.appendChild(newTr);
+
+    const checkbox = newTr.querySelector('.checkbox');
+    checkbox.addEventListener('click', () => {
+      const checkedState = getCheckedState();
+
+      if (checkbox.checked === true && checkedState.length >= 3) {
+        alert('최대 3개까지 선택 가능합니다');
+        checkbox.checked = false;
+        return;
+      }
+
+      // false인 상황에서 클릭해서 true
+      if (checkbox.checked) {
+        setCheckedState([...checkedState, code]);
+      } else {
+        setCheckedState(checkedState.filter((i) => i !== code));
+      }
+    });
+
+    const codeButton = newTr.querySelector('.codeButton');
+
+    codeButton.addEventListener('click', () => {
+      setCheckedState([code]);
+      renderInput();
+    });
+
+    const editButton = newTr.querySelector('.editButton');
+    editButton.addEventListener('click', () => {
+      window.open(`../add/sellAdd.html?mode=edit&code=${code}&name=${name}`, 'modalWindow', 'width=500,height=300');
+    });
   }
+};
+
+const renderInput = () => {
+  const codeInput = document.querySelector('.codeInput');
+  const checkedState = getCheckedState();
+
+  codeInput.value = checkedState.join(',');
+};
+
+const renderCheckBox = () => {
+  const tbody = document.querySelector('.tbody');
+  const rows = tbody.querySelectorAll('tr');
+
+  const checkedState = getCheckedState();
+  rows.forEach((row) => {
+    const checkbox = row.querySelector('.checkbox');
+    const code = row.querySelector('.codeButton').textContent;
+    checkbox.checked = checkedState.includes(code);
+  });
 };
 
 // 메인 로직
 document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem(`item_data`)) {
+    localStorage.setItem(`item_data`, JSON.stringify(item_data));
+  }
+
   const totalCount = getSearchDataApi.getDataLength('', '');
   const pageCount = totalCount % 10 === 0 ? Math.floor(totalCount / 10) : Math.floor(totalCount / 10) + 1;
 
@@ -111,5 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
   events.moveButton('right', getCurrentPageNumberState, setCurrentPageNumberState);
 
   // 검색 이벤트
-  events.search(setInputState);
+  events.search(setInputState, setCheckedState);
+
+  // 적용 이벤트
+  events.apply(getCheckedState, renderInput);
+
+  // 신규 이벤트
+  events.new(getCheckedState, renderInput);
 });

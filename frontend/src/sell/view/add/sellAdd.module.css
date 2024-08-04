@@ -45,7 +45,7 @@ body {
   border: 1px solid gray;
 }
 .enroll .code,
-.enroll .description {
+.enroll .name {
   height: 40px;
   background-color: #ededed;
   overflow: hidden;
@@ -57,7 +57,7 @@ body {
   border-bottom: 1px solid gray;
 }
 
-.enroll .description {
+.enroll .name {
   border-bottom: none;
 }
 
@@ -67,7 +67,7 @@ body {
 }
 
 .enroll .codeInput,
-.enroll .descriptionInput {
+.enroll .nameInput {
   height: 30px;
   border: 1px solid #a7a7a7;
 }
@@ -86,7 +86,7 @@ body {
 }
 
 .codeInput,
-.descriptionInput {
+.nameInput {
   width: 80%;
 }
 

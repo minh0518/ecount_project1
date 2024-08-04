@@ -45,7 +45,7 @@ body {
   border: 1px solid gray;
 }
 .top .code,
-.top .description,
+.top .name,
 .top .search {
   height: 40px;
   background-color: #ededed;
@@ -64,7 +64,7 @@ body {
 }
 
 .top .codeInput,
-.top .descriptionInput {
+.top .nameInput {
   width: 80%;
   height: 30px;
   border: 1px solid #a7a7a7;
@@ -130,7 +130,7 @@ th {
   text-align: center;
 }
 
-td input[type="checkbox"] {
+td input[type='checkbox'] {
   margin: 0;
 }
 

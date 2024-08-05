@@ -3,9 +3,11 @@ import { getSearchDataApi } from "../../service/get.js";
 
 const params = new URLSearchParams(window.location.search);
 const from = params.get("from");
-const product_code = params.get("code");
-const codeQueryArr =
-  product_code === "none" ? [] : product_code.split(",").map((i) => i.trim());
+// const product_code = params.get("code");
+
+// TODO: 필요한 기능인지 확인
+// const codeQueryArr =
+//   product_code === "none" ? [] : product_code.split(",").map((i) => i.trim());
 
 let currentPage = 1;
 let totalCount = 1;
@@ -87,9 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  document.querySelector(".codeInput").value = codeQueryArr.length
-    ? codeQueryArr.join(",")
-    : "";
+  // document.querySelector(".codeInput").value = codeQueryArr.length
+  //   ? codeQueryArr.join(",")
+  //   : "";
 
   renderTable(currentPage);
 
@@ -122,23 +124,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const applyButton = document.querySelector(".apply");
   applyButton.addEventListener("click", () => {
-    const checked = [];
-    const allCheckboxes = document.querySelectorAll(".checkbox");
-    allCheckboxes.forEach((i) => {
-      if (i.checked) checked.push(i);
-    });
     // 판매 입력(1개만 선택)
     if (from === "add") {
-      const targetTr = checked[0].closest("tr");
-      const codeValue = targetTr.querySelectorAll("td")[1].innerText;
-      const nameValue = targetTr.querySelectorAll("td")[2].innerText;
-      opener.document.querySelector(
-        ".codeInput"
-      ).value = `${codeValue},${nameValue}`;
-      window.close();
+      const allCheckboxes = document.querySelectorAll(".checkbox");
+      for (let row of allCheckboxes) {
+        if (row.checked) {
+          const targetTr = row.closest("tr");
+          const codeValue = targetTr.querySelectorAll("td")[1].innerText;
+          const nameValue = targetTr.querySelectorAll("td")[2].innerText;
+          opener.document.querySelector(
+            ".codeInput"
+          ).value = `${codeValue},${nameValue}`;
+          window.close();
+          break;
+        }
+      }
     }
     // 판매 조회(3개까지)
     if (from === "search") {
+      const allCheckboxes = document.querySelectorAll(".checkbox");
+      allCheckboxes.forEach((row) => {
+        if (row.checked) {
+          const targetTr = row.closest("tr");
+          const codeValue = targetTr.querySelectorAll("td")[1].innerText;
+          const nameValue = targetTr.querySelectorAll("td")[2].innerText;
+
+          const dataDiv = document.createElement("div");
+          dataDiv.classList.add("singleSearchedData");
+          dataDiv.innerHTML = `<span id=${codeValue}>${codeValue}</span> <span>${nameValue}</span>`;
+
+          const parent = window.opener.document.querySelector(".codeList");
+
+          parent.appendChild(dataDiv);
+        }
+      });
+      window.close();
     }
   });
 });

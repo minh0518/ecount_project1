@@ -16,8 +16,18 @@ export const renderTable = (currentPage) => {
   const endDay = document.getElementById(`endDay`).value;
 
   const codeList = document.querySelector(".codeList");
-  const spans = codeList.querySelectorAll("span");
-  const searchValues = Array.from(spans).map((span) => span.textContent);
+
+  // codeList 내부의 모든 singleSearchedData 요소를 선택
+  const dataItems = codeList.querySelectorAll(".singleSearchedData");
+  // 결과를 저장할 배열
+  const codeResult = [];
+  // 각 singleSearchedData 요소를 순회
+  dataItems.forEach((item) => {
+    const firstSpan = item.querySelector("span");
+    if (firstSpan) {
+      codeResult.push(firstSpan.innerText);
+    }
+  });
 
   const startOffset = (currentPage - 1) * 10;
   const endOffset = startOffset + 10;
@@ -26,7 +36,7 @@ export const renderTable = (currentPage) => {
     endOffset,
     { startYear, startMonth, startDay },
     { endYear, endMonth, endDay },
-    searchValues
+    codeResult
   );
 
   totalCount = length; // 상태 업데이트
@@ -141,24 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.querySelector(".codeInput").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      const input = e.target;
-      const value = input.value.trim();
-      if (value) {
-        const categoryList = document.querySelector(".codeList");
-        const newCategory = document.createElement("span");
-        newCategory.className = "code-item";
-        newCategory.textContent = value;
-        newCategory.addEventListener("click", function () {
-          categoryList.removeChild(newCategory);
-        });
-        categoryList.appendChild(newCategory);
-        input.value = "";
-      }
-      e.preventDefault();
-    }
-  });
+  // document.querySelector(".codeInput").addEventListener("keypress", (e) => {
+  //   if (e.key === "Enter") {
+  //     const input = e.target;
+  //     const value = input.value.trim();
+  //     if (value) {
+  //       const categoryList = document.querySelector(".codeList");
+  //       const newCategory = document.createElement("span");
+  //       newCategory.className = "code-item";
+  //       newCategory.textContent = value;
+  //       newCategory.addEventListener("click", function () {
+  //         categoryList.removeChild(newCategory);
+  //       });
+  //       categoryList.appendChild(newCategory);
+  //       input.value = "";
+  //     }
+  //     e.preventDefault();
+  //   }
+  // });
 
   const searchButton = document.querySelector(".searchButton");
   searchButton.addEventListener("click", () => {
@@ -197,6 +207,17 @@ const newButton = document.querySelector(".new");
 newButton.addEventListener("click", () => {
   window.open(
     `../add/sellAdd.html?mode=new`,
+    "_blank",
+    "width=1200,height=500"
+  );
+});
+
+const searchProductDataButton = document.querySelector(
+  ".searchProductDataButton"
+);
+searchProductDataButton.addEventListener("click", () => {
+  window.open(
+    `../../../product/view/search/productSearch.html?from=search`,
     "_blank",
     "width=1200,height=500"
   );

@@ -3,10 +3,10 @@ export const getSellDataApi = {
     const sell_item_data = JSON.parse(localStorage.getItem("sell_item_data"));
     return sell_item_data.length;
   },
-  getDataList: (startOffset, endOffset, startDate, endDate, searchValues) => {
+  getDataList: (startOffset, endOffset, startDate, endDate, codeResult) => {
     // startDate : { startYear:2023, startMonth:4, startDay:2 }
     // endDate : { endYear:2024, endMonth:12, endDay:5 }
-    // searchValues : ['P100003','P100005','P100004']
+    // codeResult : ['P100003','P100005','P100004']
 
     const sell_item_data = JSON.parse(localStorage.getItem("sell_item_data"));
 
@@ -22,10 +22,10 @@ export const getSellDataApi = {
     const filteredData = sell_item_data.filter((item) => {
       const itemDate = new Date(item.date);
       const isInRange = itemDate >= start && itemDate <= end;
-      const isInSearchValues =
-        searchValues.length === 0 || searchValues.includes(item.code);
+      const isInCodeResult =
+        codeResult.length === 0 || codeResult.includes(item.code);
 
-      return isInRange && isInSearchValues;
+      return isInRange && isInCodeResult;
     });
 
     console.log(filteredData);

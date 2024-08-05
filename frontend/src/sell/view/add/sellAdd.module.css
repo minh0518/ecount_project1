@@ -93,6 +93,11 @@ body {
   height: 27px;
 }
 
+.numberInput {
+  width: 25px;
+  margin-left: 20px;
+}
+
 .controlButtons {
   display: flex;
   gap: 5px;

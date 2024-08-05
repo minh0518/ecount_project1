@@ -34,4 +34,11 @@ export const getSellDataApi = {
       length: filteredData.length,
     };
   },
+
+  getSingleDataByCode: (targetCode) => {
+    const sell_item_data = JSON.parse(localStorage.getItem("sell_item_data"));
+    for (let data of sell_item_data) {
+      if (data.code === targetCode) return data;
+    }
+  },
 };

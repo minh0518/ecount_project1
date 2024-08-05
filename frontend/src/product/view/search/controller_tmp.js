@@ -151,7 +151,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const dataDiv = document.createElement("div");
           dataDiv.classList.add("singleSearchedData");
-          dataDiv.innerHTML = `<span id=${codeValue}>${codeValue}</span> <span>${nameValue}</span>`;
+          dataDiv.innerHTML = `<span id=${codeValue}>${codeValue}</span> <span>${nameValue}</span> <button class="deletesingleSearchedData">x</button>`;
+          dataDiv
+            .querySelector(".deletesingleSearchedData")
+            .addEventListener("click", () => {
+              dataDiv.style.display = "none";
+            });
 
           const parent = window.opener.document.querySelector(".codeList");
 
@@ -160,5 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       window.close();
     }
+  });
+
+  const newButton = document.querySelector(".new");
+  newButton.addEventListener("click", () => {
+    window.open(
+      `../add/productAdd.html?mode=new`,
+      "_blank",
+      "width=500,height=300"
+    );
   });
 });

@@ -15,6 +15,7 @@ export const renderTable = (currentPage) => {
   const endMonth = document.getElementById(`endMonth`).value;
   const endDay = document.getElementById(`endDay`).value;
 
+  const descriptionInput = document.querySelector(`.descriptionInput`).value;
   const codeList = document.querySelector(".codeList");
 
   // codeList 내부의 모든 singleSearchedData 요소를 선택
@@ -68,6 +69,20 @@ export const renderTable = (currentPage) => {
     newTr.innerHTML = htmlSting;
     tbody.appendChild(newTr);
   }
+
+  const dateButtons = document.querySelectorAll(".dateButton");
+  dateButtons.forEach((row) => {
+    row.addEventListener("click", () => {
+      const parentRow = row.closest("tr");
+      const codeValue = parentRow.querySelectorAll("td")[2].innerText;
+
+      window.open(
+        `../add/sellAdd.html?mode=edit&code=${codeValue}`,
+        "_blank",
+        "width=1200,height=500"
+      );
+    });
+  });
 };
 
 function makeSelectRange(elementId, start, end, defaultValue) {
@@ -172,6 +187,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchButton = document.querySelector(".searchButton");
   searchButton.addEventListener("click", () => {
+    if (document.querySelector(".codeList").innerHTML === "") {
+      alert("선택된 항목이 없습니다");
+      return;
+    }
+
     currentPage = 1;
 
     renderTable(currentPage);

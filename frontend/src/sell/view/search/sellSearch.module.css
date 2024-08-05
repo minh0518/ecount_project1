@@ -46,7 +46,7 @@ body {
 }
 
 .top .date,
-.top .name,
+.top .code,
 .top .description,
 .top .search {
   height: 40px;
@@ -65,7 +65,7 @@ body {
   border-bottom: none;
 }
 
-.top .nameInput,
+.top .codeInput,
 .top .descriptionInput {
   width: 500px;
   height: 30px;
@@ -142,7 +142,7 @@ th {
   text-align: center;
 }
 
-td input[type='checkbox'] {
+td input[type="checkbox"] {
   margin: 0;
 }
 

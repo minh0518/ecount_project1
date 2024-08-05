@@ -46,7 +46,7 @@ body {
 }
 
 .searchSection .date,
-.searchSection .product,
+.searchSection .code,
 .searchSection .quantity,
 .searchSection .price,
 .searchSection .description {
@@ -74,7 +74,7 @@ body {
   color: white;
 }
 
-.searchSection .productInput,
+.searchSection .codeInput,
 .searchSection .quantityInput,
 .searchSection .priceInput,
 .searchSection .descriptionInput {

@@ -1,5 +1,5 @@
 import { events } from "./event.js";
-import { getSearchDataApi } from "./service/get.js";
+import { getSearchDataApi } from "../../service/get.js";
 import { item_data } from "../../data/data.js";
 
 // # state
@@ -146,7 +146,7 @@ export const renderTable = (currentPageData) => {
     editButton.addEventListener("click", () => {
       window.open(
         `../add/productAdd.html?mode=edit&code=${code}&name=${name}`,
-        "modalWindow",
+        "_blank",
         "width=500,height=300"
       );
     });

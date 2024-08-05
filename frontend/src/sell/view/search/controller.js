@@ -34,12 +34,14 @@ export const renderTable = (currentPage) => {
   const tbody = document.querySelector(".tbody");
 
   tbody.innerHTML = "";
+
+  console.log(currentPageStateData);
   for (let {
     date,
     code,
     number,
     name,
-    count,
+    quantity,
     price,
     description,
   } of currentPageStateData) {
@@ -49,7 +51,7 @@ export const renderTable = (currentPage) => {
                 <td><button class="dateButton">${date}-${number}</button></td>
                 <td>${code}</td>
                 <td>${name}</td>
-                <td>${count}</td>
+                <td>${quantity}</td>
                 <td>${price}</td>
                 <td>${description}</td>
               `;
@@ -195,7 +197,7 @@ const newButton = document.querySelector(".new");
 newButton.addEventListener("click", () => {
   window.open(
     `../add/sellAdd.html?mode=new`,
-    "modalWindow",
+    "_blank",
     "width=1200,height=500"
   );
 });

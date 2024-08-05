@@ -25,18 +25,31 @@
               </select>
             </div>
           </div>
+
+          <!-- 품목코드 + 이름 -->
           <div class="code">
             <p class="category">품목</p>
-            <button class="searchButton">돋보기</button>
+            <button class="searchButton">검색하기</button>
             <input class="codeInput" placeholder="품목" />
           </div>
           <div class="quantity">
             <p class="category">수량</p>
-            <input class="quantityInput" placeholder="수량" />
+            <input
+              type="number"
+              min="1"
+              class="quantityInput"
+              placeholder="수량"
+            />
           </div>
           <div class="price">
             <p class="category">단가</p>
-            <input class="priceInput" placeholder="단가" />
+            <input
+              type="number"
+              min="0"
+              step="100"
+              class="priceInput"
+              placeholder="단가"
+            />
           </div>
           <div class="description">
             <p class="category">적요</p>

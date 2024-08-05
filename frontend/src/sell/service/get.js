@@ -9,6 +9,7 @@ export const getSellDataApi = {
     // searchValues : ['P100003','P100005','P100004']
 
     const sell_item_data = JSON.parse(localStorage.getItem("sell_item_data"));
+
     // return sell_item_data.slice(startOffset, endOffset);
 
     const start = new Date(

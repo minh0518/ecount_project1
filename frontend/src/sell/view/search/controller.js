@@ -6,6 +6,16 @@ import { deleteSellDataApi } from "../../service/delete.js";
 let currentPage = 1;
 let totalCount = 1;
 
+const convertDate = (date) => {
+  date = new Date(date);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // 월을 2자리로 맞춤
+  const day = String(date.getDate()).padStart(2, "0"); // 일을 2자리로 맞춤
+
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+};
+
 // 테이블 렌더링
 export const renderTable = (currentPage) => {
   const startYear = document.getElementById(`startYear`).value;
@@ -46,7 +56,6 @@ export const renderTable = (currentPage) => {
 
   tbody.innerHTML = "";
 
-  console.log(currentPageStateData);
   for (let {
     date,
     code,
@@ -59,7 +68,9 @@ export const renderTable = (currentPage) => {
     const newTr = document.createElement("tr");
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
-                <td><button class="dateButton">${date}-${number}</button></td>
+                <td><button class="dateButton">${convertDate(
+                  date
+                )}-${number}</button></td>
                 <td>${code}</td>
                 <td>${name}</td>
                 <td>${quantity}</td>

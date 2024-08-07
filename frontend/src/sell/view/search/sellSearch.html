@@ -1,69 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./sellSearch.module.css" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./sellSearch.module.css" />
-  <title>Document</title>
-</head>
-
-<body>
-  <div class="container">
-    <div class="content">
-      <p class="title">■ 판매 조회</p>
-      <div class="top">
-        <div class="date">
-          <p class="category">전표 일자</p>
-          <!-- <div class="dateInput">
-            <select id="startYear"></select>/
-            <select id="startMonth"></select>/
-            <select id="startDay"></select>
+  <body>
+    <div class="container">
+      <div class="content">
+        <p class="title">■ 판매 조회</p>
+        <div class="top">
+          <div class="date">
+            <p class="category">전표 일자</p>
+            <input type="date" id="startDate" min="2020-01-01" />
             ~
-            <select id="endYear"></select>/
-            <select id="endMonth"></select>/
-            <select id="endDay"></select>
-          </div> -->
-          <!-- max 오늘 날짜로 지정 필요 -->
-          <input type="date" id="startDate" min="2020-01-01" />
-          ~
-          <input type="date" id="endDate" min="2020-01-01" />
-        </div>
+            <input type="date" id="endDate" min="2020-01-01" />
+          </div>
 
-        <div class="code">
-          <p class="category">품목</p>
-          <button class="searchProductDataButton">검색하기</button>
-          <!-- <input class="codeInput" placeholder="품목" /> -->
-          <div class="codeList"></div>
+          <div class="code">
+            <p class="category">품목</p>
+            <button class="searchProductDataButton">검색하기</button>
+            <!-- <input class="codeInput" placeholder="품목" /> -->
+            <div class="codeList"></div>
+          </div>
+          <div class="description">
+            <p class="category">적요</p>
+            <input class="descriptionInput" placeholder="적요" />
+          </div>
+          <div class="search">
+            <button class="searchButton">검색</button>
+          </div>
         </div>
-        <div class="description">
-          <p class="category">적요</p>
-          <input class="descriptionInput" placeholder="적요" />
-        </div>
-        <div class="search">
-          <button class="searchButton">검색</button>
-        </div>
-      </div>
-      <div class="bottom">
-        <div class="controlButtons">
-          <button class="leftButton">&lt; &nbsp; 이전</button>
-          <button class="rightButton">다음 &nbsp; &gt;</button>
-        </div>
-        <div class="resultTable">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" id="checkAll" /></th>
-                <th>전표일자/번호</th>
-                <th>품목코드</th>
-                <th>품목명</th>
-                <th>수량</th>
-                <th>단가</th>
-                <th>적요</th>
-              </tr>
-            </thead>
-            <tbody class="tbody">
-              <!-- <tr>
+        <div class="bottom">
+          <div class="controlButtons">
+            <button class="leftButton">&lt; &nbsp; 이전</button>
+            <button class="rightButton">다음 &nbsp; &gt;</button>
+          </div>
+          <div class="resultTable">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="checkAll" /></th>
+                  <th>전표일자/번호</th>
+                  <th>품목코드</th>
+                  <th>품목명</th>
+                  <th>수량</th>
+                  <th>단가</th>
+                  <th>적요</th>
+                </tr>
+              </thead>
+              <tbody class="tbody">
+                <!-- <tr>
                   <td><input type="checkbox" /></td>
                   <td>2023/01/10-3</td>
                   <td>P100001</td>
@@ -72,17 +61,16 @@
                   <td>2,000</td>
                   <td>zzzzz</td>
                 </tr> -->
-            </tbody>
-          </table>
-        </div>
-        <div class="optionButtons">
-          <button class="new">신규</button>
-          <button class="delete">선택 삭제</button>
+              </tbody>
+            </table>
+          </div>
+          <div class="optionButtons">
+            <button class="new">신규</button>
+            <button class="delete">선택 삭제</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <script type="module" src="./controller.js"></script>
-</body>
-
+    <script type="module" src="./controller.js"></script>
+  </body>
 </html>

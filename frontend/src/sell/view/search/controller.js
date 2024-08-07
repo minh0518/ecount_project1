@@ -1,29 +1,27 @@
 import { sell_item_data } from "../../data/data.js";
 import { getSellDataApi } from "../../service/get.js";
 import { deleteSellDataApi } from "../../service/delete.js";
+import { getDateStringByDate } from "../../../utils/date.js";
 
 // 상태
 let currentPage = 1;
 let totalCount = 1;
 
-const convertDate = (date) => {
-  date = new Date(date);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // 월을 2자리로 맞춤
-  const day = String(date.getDate()).padStart(2, "0"); // 일을 2자리로 맞춤
+// const convertDate = (date) => {
+//   date = new Date(date);
+//   const year = date.getFullYear();
+//   const month = String(date.getMonth() + 1).padStart(2, "0"); // 월을 2자리로 맞춤
+//   const day = String(date.getDate()).padStart(2, "0"); // 일을 2자리로 맞춤
 
-  const formattedDate = `${year}-${month}-${day}`;
-  return formattedDate;
-};
+//   const formattedDate = `${year}-${month}-${day}`;
+//   return formattedDate;
+// };
 
 // 테이블 렌더링
 export const renderTable = (currentPage) => {
-  const startYear = document.getElementById(`startYear`).value;
-  const startMonth = document.getElementById(`startMonth`).value;
-  const startDay = document.getElementById(`startDay`).value;
-  const endYear = document.getElementById(`endYear`).value;
-  const endMonth = document.getElementById(`endMonth`).value;
-  const endDay = document.getElementById(`endDay`).value;
+
+  const startDate = document.getElementById('startDate').value
+  const endDate = document.getElementById('endDate').value
 
   const descriptionInput = document.querySelector(`.descriptionInput`).value;
   const codeList = document.querySelector(".codeList");
@@ -40,15 +38,24 @@ export const renderTable = (currentPage) => {
     }
   });
 
+
+
   const startOffset = (currentPage - 1) * 10;
   const endOffset = startOffset + 10;
+
+  console.log(startOffset,
+    endOffset,
+    startDate === '' ? '' : new Date(startDate),
+    endDate === '' ? '' : new Date(endDate),
+    codeResult)
   const { data: currentPageStateData, length } = getSellDataApi.getDataList(
     startOffset,
     endOffset,
-    { startYear, startMonth, startDay },
-    { endYear, endMonth, endDay },
+    startDate === '' ? '' : new Date(startDate),
+    endDate === '' ? '' : new Date(endDate),
     codeResult
   );
+
 
   totalCount = length; // 상태 업데이트
 
@@ -65,12 +72,14 @@ export const renderTable = (currentPage) => {
     price,
     description,
   } of currentPageStateData) {
+
+
     const newTr = document.createElement("tr");
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
-                <td><button class="dateButton">${convertDate(
-                  date
-                )}-${number}</button></td>
+                <td><button class="d
+      dateateButton">${getDateStringByDate(
+      date)}-${number}</button></td>
                 <td>${code}</td>
                 <td>${name}</td>
                 <td>${quantity}</td>
@@ -96,31 +105,6 @@ export const renderTable = (currentPage) => {
   });
 };
 
-function makeSelectRange(elementId, start, end, defaultValue) {
-  const select = document.getElementById(elementId);
-  select.innerHTML = ""; // 기존 옵션 제거
-  for (let i = start; i <= end; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.text = i;
-    select.appendChild(option);
-  }
-  if (defaultValue !== undefined) {
-    select.value = defaultValue;
-  }
-}
-
-function updateDayOptions(
-  yearSelectId,
-  monthSelectId,
-  daySelectId,
-  defaultValue
-) {
-  const year = document.getElementById(yearSelectId).value;
-  const month = document.getElementById(monthSelectId).value;
-  const daysInMonth = new Date(year, month, 0).getDate();
-  makeSelectRange(daySelectId, 1, daysInMonth, defaultValue);
-}
 
 // 메인 로직
 document.addEventListener("DOMContentLoaded", () => {
@@ -128,28 +112,19 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(`sell_item_data`, JSON.stringify(sell_item_data));
   }
 
-  makeSelectRange("startYear", 2020, 2024, 2020);
-  makeSelectRange("startMonth", 1, 12, 1);
-  updateDayOptions("startYear", "startMonth", "startDay", 1);
-  makeSelectRange("endYear", 2020, 2024, 2024);
-  makeSelectRange("endMonth", 1, 12, 12);
-  updateDayOptions("endYear", "endMonth", "endDay", 31);
+  // 최대 선택 날짜 오늘까지
+  const startDate = document.getElementById('startDate')
+  startDate.max = getDateStringByDate(new Date())
+  const endDate = document.getElementById('endDate')
+  endDate.max = getDateStringByDate(new Date())
 
-  // 이벤트 리스너 추가 (시작 날짜)
-  document.getElementById("startYear").addEventListener("change", () => {
-    updateDayOptions("startYear", "startMonth", "startDay");
-  });
-  document.getElementById("startMonth").addEventListener("change", () => {
-    updateDayOptions("startYear", "startMonth", "startDay");
-  });
-
-  // 이벤트 리스너 추가 (종료 날짜)
-  document.getElementById("endYear").addEventListener("change", () => {
-    updateDayOptions("endYear", "endMonth", "endDay");
-  });
-  document.getElementById("endMonth").addEventListener("change", () => {
-    updateDayOptions("endYear", "endMonth", "endDay");
-  });
+  // startDate의 다음날을 endDate의 시작값으로 지정
+  startDate.addEventListener('change', () => {
+    const endDate = document.getElementById('endDate')
+    const startDateValue = new Date(startDate.value)
+    const nextDay = new Date(startDateValue.getTime() + (24 * 60 * 60 * 1000));
+    endDate.min = getDateStringByDate(nextDay)
+  })
 
   // 1페이지 테이블 렌더링
   renderTable(currentPage);

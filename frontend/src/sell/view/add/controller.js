@@ -40,8 +40,7 @@ if (mode === "new") {
     const codeInput = document.querySelector(".codeInput").value;
 
     window.open(
-      `../../../product/view/search/productSearch.html?code=${
-        codeInput.length ? codeInput : "none"
+      `../../../product/view/search/productSearch.html?code=${codeInput.length ? codeInput : "none"
       }&from=add`,
       "_blank",
       "width=1200,height=500"
@@ -127,8 +126,7 @@ if (mode === "edit") {
     const codeInput = document.querySelector(".codeInput").value;
 
     window.open(
-      `../../../product/view/search/productSearch.html?code=${
-        codeInput.length ? codeInput : "none"
+      `../../../product/view/search/productSearch.html?code=${codeInput.length ? codeInput : "none"
       }&from=add`,
       "_blank",
       "width=1200,height=500"

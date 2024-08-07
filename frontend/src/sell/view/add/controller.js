@@ -70,6 +70,9 @@ if (mode === "edit") {
   const code = params.get("code");
 
 
+  const title = document.querySelector('.title')
+  title.innerText = '■ 판매 수정'
+
 
   // code기반 데이터 기존 조회
   let { date = new Date(date), description, name, number, price, quantity } =

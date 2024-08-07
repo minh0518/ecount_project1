@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./sellAdd.module.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="content">
-        <p class="title">■ 판매 입력</p>
-        <div class="searchSection">
-          <div class="date">
-            <p class="category">전표 일자</p>
-            <div class="dateInput">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./sellAdd.module.css" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <p class="title">■ 판매 입력</p>
+      <div class="searchSection">
+        <div class="date">
+          <p class="category">전표 일자</p>
+          <input type="date" id="date" min="2020-01-01" />
+          <!-- <div class="dateInput">
               <select id="year">
                 <option>2023</option></select
               >/
@@ -23,52 +26,42 @@
               <select id="day">
                 <option>08</option>
               </select>
-            </div>
-            /
-            <input class="numberInput">
+            </div> -->
+          /
+          <input class="numberInput">
 
-            </input>
-          </div>
-
-          <!-- 품목코드 + 이름 -->
-          <div class="code">
-            <p class="category">품목</p>
-            <button class="searchButton">검색하기</button>
-            <input class="codeInput" placeholder="품목" readonly />
-          </div>
-          <div class="quantity">
-            <p class="category">수량</p>
-            <input
-              type="number"
-              min="1"
-              class="quantityInput"
-              placeholder="수량"
-            />
-          </div>
-          <div class="price">
-            <p class="category">단가</p>
-            <input
-              type="number"
-              min="0"
-              step="100"
-              class="priceInput"
-              placeholder="단가"
-            />
-          </div>
-          <div class="description">
-            <p class="category">적요</p>
-            <input class="descriptionInput" placeholder="적요" />
-          </div>
+          </input>
         </div>
 
-        <div class="optionButtons">
-          <button class="save">저장</button>
-          <button class="delete">삭제</button>
-          <button class="rewrite">다시작성</button>
-          <button class="close">닫기</button>
+        <!-- 품목코드 + 이름 -->
+        <div class="code">
+          <p class="category">품목</p>
+          <button class="searchButton">검색하기</button>
+          <input class="codeInput" placeholder="품목" readonly />
+        </div>
+        <div class="quantity">
+          <p class="category">수량</p>
+          <input type="number" min="1" class="quantityInput" placeholder="수량" />
+        </div>
+        <div class="price">
+          <p class="category">단가</p>
+          <input type="number" min="0" step="100" class="priceInput" placeholder="단가" />
+        </div>
+        <div class="description">
+          <p class="category">적요</p>
+          <input class="descriptionInput" placeholder="적요" />
         </div>
       </div>
+
+      <div class="optionButtons">
+        <button class="save">저장</button>
+        <button class="delete">삭제</button>
+        <button class="rewrite">다시작성</button>
+        <button class="close">닫기</button>
+      </div>
     </div>
-    <script type="module" src="./controller.js"></script>
-  </body>
+  </div>
+  <script type="module" src="./controller.js"></script>
+</body>
+
 </html>

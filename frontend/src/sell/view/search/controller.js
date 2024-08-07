@@ -43,11 +43,7 @@ export const renderTable = (currentPage) => {
   const startOffset = (currentPage - 1) * 10;
   const endOffset = startOffset + 10;
 
-  console.log(startOffset,
-    endOffset,
-    startDate === '' ? '' : new Date(startDate),
-    endDate === '' ? '' : new Date(endDate),
-    codeResult)
+
   const { data: currentPageStateData, length } = getSellDataApi.getDataList(
     startOffset,
     endOffset,
@@ -77,8 +73,7 @@ export const renderTable = (currentPage) => {
     const newTr = document.createElement("tr");
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
-                <td><button class="d
-      dateateButton">${getDateStringByDate(
+                <td><button class="dateButton">${getDateStringByDate(
       date)}-${number}</button></td>
                 <td>${code}</td>
                 <td>${name}</td>

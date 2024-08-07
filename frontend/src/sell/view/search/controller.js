@@ -143,11 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const searchButton = document.querySelector('.searchButton');
   searchButton.addEventListener('click', () => {
-    if (document.querySelector('.codeList').innerHTML === '') {
-      alert('선택된 항목이 없습니다');
-      return;
-    }
-
     currentPage = 1;
 
     renderTable(currentPage);

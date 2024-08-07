@@ -114,16 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const applyButton = document.querySelector('.apply');
   applyButton.addEventListener('click', () => {
+    const allCheckboxes = document.querySelectorAll('.checkbox');
+    let checkedFlag = false;
+
     // 판매 입력(1개만 선택)
     if (from === 'add') {
-      const allCheckboxes = document.querySelectorAll('.checkbox');
       for (let row of allCheckboxes) {
         if (row.checked) {
+          checkedFlag = true;
           const targetTr = row.closest('tr');
           const codeValue = targetTr.querySelectorAll('td')[1].innerText;
           const nameValue = targetTr.querySelectorAll('td')[2].innerText;
           opener.document.querySelector('.codeInput').value = `${codeValue},${nameValue}`;
-          window.close();
           break;
         }
       }
@@ -132,9 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (from === 'search') {
       const parent = window.opener.document.querySelector('.codeList');
       parent.innerHTML = '';
-      const allCheckboxes = document.querySelectorAll('.checkbox');
+
       allCheckboxes.forEach((row) => {
         if (row.checked) {
+          checkedFlag = true;
           const targetTr = row.closest('tr');
           const codeValue = targetTr.querySelectorAll('td')[1].innerText;
           const nameValue = targetTr.querySelectorAll('td')[2].innerText;
@@ -142,12 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const dataDiv = document.createElement('div');
           dataDiv.classList.add('singleSearchedData');
           dataDiv.innerHTML = `<span>${codeValue}</span> <span>${nameValue}</span> <button class="deleteSearchedData">x</button>`;
-
           parent.appendChild(dataDiv);
         }
       });
-      window.close();
     }
+    if (checkedFlag) window.close();
+    if (!checkedFlag) alert('체크된 항목이 없습니다');
   });
 
   const newButton = document.querySelector('.new');

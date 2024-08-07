@@ -1,112 +1,37 @@
-import { events } from "./event.js";
+import { product_item_data } from "../../data/data.js";
 import { getSearchDataApi } from "../../service/get.js";
-import { item_data } from "../../data/data.js";
 
-// # state
+const params = new URLSearchParams(window.location.search);
+const from = params.get("from");
+// const product_code = params.get("code");
 
-// 현재 페이지
-let currentPageNumberState = 1;
-// 전체 페이지 개수
-let totalPageCountState = 1;
-// 현재 input
-let inputState = {
-  code: "",
-  name: "",
-};
-// 체크박스
-let checkedState = [];
+// TODO: 필요한 기능인지 확인
+// const codeQueryArr =
+//   product_code === "none" ? [] : product_code.split(",").map((i) => i.trim());
 
-function getInputState() {
-  return inputState;
-}
-function setInputState(newInputState) {
-  inputState = {
-    ...newInputState,
-  };
-  const totalCount = getSearchDataApi.getDataLength(
-    inputState.code,
-    inputState.name
-  );
-  const pageCount =
-    totalCount % 10 === 0
-      ? Math.floor(totalCount / 10)
-      : Math.floor(totalCount / 10) + 1;
+let currentPage = 1;
+let totalCount = 1;
 
-  // 전체 리렌더링
-  setTotalPageCountState(pageCount);
-  setCurrentPageNumberState(1);
-}
-
-function getTotalPageCountState() {
-  return totalPageCountState;
-}
-function setTotalPageCountState(targetValue) {
-  totalPageCountState = targetValue;
-  renderPageButtons();
-}
-
-function getCurrentPageNumberState() {
-  return currentPageNumberState;
-}
-
-function setCurrentPageNumberState(targetPageNumber) {
-  const toalPageCount = getTotalPageCountState();
-  const inputState = getInputState();
-
-  currentPageNumberState = targetPageNumber;
-
-  if (currentPageNumberState > toalPageCount)
-    currentPageNumberState = toalPageCount;
-  if (currentPageNumberState <= 0) currentPageNumberState = 1;
-  const startOffset = (currentPageNumberState - 1) * 10;
+// 테이블 렌더링
+export const renderTable = (currentPage) => {
+  const startOffset = (currentPage - 1) * 10;
   const endOffset = startOffset + 10;
-  const currentPageStateData = getSearchDataApi.getDataList(
-    inputState.code,
-    inputState.name,
+  const nameInput = document.querySelector(".nameInput").value;
+  const codeInputArr = document.querySelector(".codeInput").value;
+
+  const { data: currentPageStateData, length } = getSearchDataApi.getData(
     startOffset,
-    endOffset
+    endOffset,
+    codeInputArr,
+    nameInput
   );
 
-  renderTable(currentPageStateData);
-}
+  totalCount = length; // 상태 업데이트
 
-function getCheckedState() {
-  return checkedState;
-}
-function setCheckedState(newCheckedState) {
-  checkedState = newCheckedState;
-
-  renderCheckBox();
-}
-
-// # 렌더링
-export const renderPageButtons = () => {
-  const toalPageCount = getTotalPageCountState();
-  const pageButtons = document.querySelector(".pageButtons");
-  pageButtons.innerHTML = "";
-
-  // 1페이지 : slice index 0~9
-  let currentPage = 1;
-  while (currentPage <= toalPageCount) {
-    let page = currentPage; // 클로저 방지
-
-    const singlePageButton = document.createElement("button");
-    singlePageButton.innerText = currentPage;
-
-    singlePageButton.addEventListener("click", () => {
-      setCurrentPageNumberState(page);
-    });
-    pageButtons.appendChild(singlePageButton);
-
-    currentPage += 1;
-  }
-};
-
-export const renderTable = (currentPageData) => {
   const tbody = document.querySelector(".tbody");
 
   tbody.innerHTML = "";
-  for (let { code, name } of currentPageData) {
+  for (let { code, name } of currentPageStateData) {
     const newTr = document.createElement("tr");
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
@@ -118,28 +43,30 @@ export const renderTable = (currentPageData) => {
     tbody.appendChild(newTr);
 
     const checkbox = newTr.querySelector(".checkbox");
-    checkbox.addEventListener("click", () => {
-      const checkedState = getCheckedState();
 
-      if (checkbox.checked === true && checkedState.length >= 3) {
-        alert("최대 3개까지 선택 가능합니다");
-        checkbox.checked = false;
-        return;
+    checkbox.addEventListener("change", () => {
+      const allCheckboxes = document.querySelectorAll(".checkbox");
+      // 판매 입력(1개만 선택)
+      if (from === "add") {
+        allCheckboxes.forEach((i) => {
+          if (i.checked) i.checked = false;
+        });
+        checkbox.checked = true;
       }
 
-      // false인 상황에서 클릭해서 true
-      if (checkbox.checked) {
-        setCheckedState([...checkedState, code]);
-      } else {
-        setCheckedState(checkedState.filter((i) => i !== code));
+      // 판매 조회(3개까지)
+      if (from === "search") {
+        let count = 0;
+        allCheckboxes.forEach((i) => {
+          if (i.checked) count += 1;
+        });
+
+        if (count > 3) {
+          alert("최대 3개까지 선택 가능합니다");
+          checkbox.checked = false;
+          return;
+        }
       }
-    });
-
-    const codeButton = newTr.querySelector(".codeButton");
-
-    codeButton.addEventListener("click", () => {
-      setCheckedState([code]);
-      renderInput();
     });
 
     const editButton = newTr.querySelector(".editButton");
@@ -153,61 +80,99 @@ export const renderTable = (currentPageData) => {
   }
 };
 
-const renderInput = () => {
-  const codeInput = document.querySelector(".codeInput");
-  const checkedState = getCheckedState();
-
-  codeInput.value = checkedState.join(",");
-};
-
-const renderCheckBox = () => {
-  const tbody = document.querySelector(".tbody");
-  const rows = tbody.querySelectorAll("tr");
-
-  const checkedState = getCheckedState();
-  rows.forEach((row) => {
-    const checkbox = row.querySelector(".checkbox");
-    const code = row.querySelector(".codeButton").textContent;
-    checkbox.checked = checkedState.includes(code);
-  });
-};
-
-// 메인 로직
+// 메인로직
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem(`item_data`)) {
-    localStorage.setItem(`item_data`, JSON.stringify(item_data));
+  if (!localStorage.getItem(`product_item_data`)) {
+    localStorage.setItem(
+      `product_item_data`,
+      JSON.stringify(product_item_data)
+    );
   }
 
-  const totalCount = getSearchDataApi.getDataLength("", "");
-  const pageCount =
-    totalCount % 10 === 0
-      ? Math.floor(totalCount / 10)
-      : Math.floor(totalCount / 10) + 1;
+  // document.querySelector(".codeInput").value = codeQueryArr.length
+  //   ? codeQueryArr.join(",")
+  //   : "";
 
-  // 페이지네이션 버튼 세팅
-  setTotalPageCountState(pageCount);
+  renderTable(currentPage);
 
-  // 첫페이지 테이블 세팅
-  setCurrentPageNumberState(1);
+  const leftButton = document.querySelector(".leftButton");
+  const rightButton = document.querySelector(".rightButton");
 
-  // 이전, 다음 버튼 이벤트
-  events.moveButton(
-    "left",
-    getCurrentPageNumberState,
-    setCurrentPageNumberState
-  );
-  events.moveButton(
-    "right",
-    getCurrentPageNumberState,
-    setCurrentPageNumberState
-  );
+  leftButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage -= 1; // 상태 업데이트
+      renderTable(currentPage);
+    }
+  });
 
-  // 검색 이벤트
-  events.search(setInputState, setCheckedState);
+  rightButton.addEventListener("click", () => {
+    const totalPageCount =
+      totalCount % 10 === 0
+        ? Math.floor(totalCount / 10)
+        : Math.floor(totalCount / 10) + 1;
+    if (currentPage < totalPageCount) {
+      currentPage += 1; // 상태 업데이트
+      renderTable(currentPage);
+    }
+  });
 
-  // 적용 이벤트
-  events.apply(getCheckedState, renderInput);
+  const searchButton = document.querySelector(".searchButton");
+  searchButton.addEventListener("click", () => {
+    currentPage = 1;
+    renderTable(currentPage);
+  });
 
-  // 신규 이벤트
-  events.new(getCheckedState, renderInput);
+  const applyButton = document.querySelector(".apply");
+  applyButton.addEventListener("click", () => {
+    // 판매 입력(1개만 선택)
+    if (from === "add") {
+      const allCheckboxes = document.querySelectorAll(".checkbox");
+      for (let row of allCheckboxes) {
+        if (row.checked) {
+          const targetTr = row.closest("tr");
+          const codeValue = targetTr.querySelectorAll("td")[1].innerText;
+          const nameValue = targetTr.querySelectorAll("td")[2].innerText;
+          opener.document.querySelector(
+            ".codeInput"
+          ).value = `${codeValue},${nameValue}`;
+          window.close();
+          break;
+        }
+      }
+    }
+    // 판매 조회(3개까지)
+    if (from === "search") {
+      const allCheckboxes = document.querySelectorAll(".checkbox");
+      allCheckboxes.forEach((row) => {
+        if (row.checked) {
+          const targetTr = row.closest("tr");
+          const codeValue = targetTr.querySelectorAll("td")[1].innerText;
+          const nameValue = targetTr.querySelectorAll("td")[2].innerText;
+
+          const dataDiv = document.createElement("div");
+          dataDiv.classList.add("singleSearchedData");
+          dataDiv.innerHTML = `<span id=${codeValue}>${codeValue}</span> <span>${nameValue}</span> <button class="deletesingleSearchedData">x</button>`;
+          dataDiv
+            .querySelector(".deletesingleSearchedData")
+            .addEventListener("click", () => {
+              dataDiv.style.display = "none";
+            });
+
+          const parent = window.opener.document.querySelector(".codeList");
+
+          parent.appendChild(dataDiv);
+        }
+      });
+      window.close();
+    }
+  });
+
+  const newButton = document.querySelector(".new");
+  newButton.addEventListener("click", () => {
+    window.open(
+      `../add/productAdd.html?mode=new`,
+      "_blank",
+      "width=500,height=300"
+    );
+  });
 });

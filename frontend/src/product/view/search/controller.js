@@ -3,14 +3,10 @@ import { getSearchDataApi } from '../../service/get.js';
 
 const params = new URLSearchParams(window.location.search);
 const from = params.get('from');
-// const product_code = params.get("code");
-
-// TODO: 필요한 기능인지 확인
-// const codeQueryArr =
-//   product_code === "none" ? [] : product_code.split(",").map((i) => i.trim());
 
 let currentPage = 1;
 let totalCount = 1;
+let checkedCode = new Map() // Map() {code => name, ...}
 
 // 테이블 렌더링
 export const renderTable = (currentPage) => {
@@ -33,6 +29,7 @@ export const renderTable = (currentPage) => {
   tbody.innerHTML = '';
   for (let { code, name } of currentPageStateData) {
     const newTr = document.createElement('tr');
+    newTr.setAttribute('data-code', code);
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
                 <td><button class="codeButton">${code}</button></td>
@@ -41,31 +38,64 @@ export const renderTable = (currentPage) => {
               `;
     newTr.innerHTML = htmlSting;
     tbody.appendChild(newTr);
+    if (checkedCode.has(code)) {
+      newTr.querySelector('.checkbox').checked = true
+    }
+
+
+    const codeButton = newTr.querySelector('.codeButton')
+    codeButton.addEventListener('click', () => {
+      checkedCode.set(code, name)
+      const apllyButton = document.querySelector('.apply')
+      if (apllyButton) apllyButton.click()
+    })
 
     const checkbox = newTr.querySelector('.checkbox');
-
     checkbox.addEventListener('change', () => {
-      const allCheckboxes = document.querySelectorAll('.checkbox');
       // 판매 입력(1개만 선택)
       if (from === 'add') {
-        allCheckboxes.forEach((i) => {
-          if (i.checked) i.checked = false;
-        });
-        checkbox.checked = true;
+
+        if (checkedCode.size) {
+          const existCode = (checkedCode.keys().next().value)
+          // 같은걸 골랐다면 체크박스만 해제
+          if (existCode === code) {
+            checkbox.checked = false
+            checkedCode.delete(existCode)
+            return
+          }
+
+          // 다른걸 골랐다면 이전 선택값 체크박스 해제
+          const tr = document.querySelector(`tr[data-code="${existCode}"]`);
+          if (tr) {
+            const deleteTargetCheckbox = tr.querySelector('input[type="checkbox"]');
+            if (deleteTargetCheckbox) deleteTargetCheckbox.checked = false;
+          }
+          checkedCode.delete(existCode)
+        }
+        checkedCode = new Map([
+          [code, name]
+        ])
       }
 
       // 판매 조회(3개까지)
       if (from === 'search') {
-        let count = 0;
-        allCheckboxes.forEach((i) => {
-          if (i.checked) count += 1;
-        });
+        // 같은걸 골랐다면 체크박스만 해제
+        if (checkedCode.has(code)) {
+          checkbox.checked = false
+          checkedCode.delete(code)
+          return
+        }
 
-        if (count > 3) {
+        if (!checkedCode.size || checkedCode.size <= 3) {
+          checkedCode.set(code, name)
+        }
+        if (checkedCode.size > 3) {
           alert('최대 3개까지 선택 가능합니다');
           checkbox.checked = false;
-          return;
+          // 직전 값 삭제
+          checkedCode = new Map([...checkedCode].slice(0, -1))
         }
+
       }
     });
 
@@ -82,9 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(`product_item_data`, JSON.stringify(product_item_data));
   }
 
-  // document.querySelector(".codeInput").value = codeQueryArr.length
-  //   ? codeQueryArr.join(",")
-  //   : "";
 
   renderTable(currentPage);
 
@@ -114,43 +141,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const applyButton = document.querySelector('.apply');
   applyButton.addEventListener('click', () => {
-    const allCheckboxes = document.querySelectorAll('.checkbox');
-    let checkedFlag = false;
+
+    if (!checkedCode.size) {
+      alert('체크된 항목이 없습니다');
+      return;
+    }
 
     // 판매 입력(1개만 선택)
     if (from === 'add') {
-      for (let row of allCheckboxes) {
-        if (row.checked) {
-          checkedFlag = true;
-          const targetTr = row.closest('tr');
-          const codeValue = targetTr.querySelectorAll('td')[1].innerText;
-          const nameValue = targetTr.querySelectorAll('td')[2].innerText;
-          opener.document.querySelector('.codeInput').value = `${codeValue},${nameValue}`;
-          break;
-        }
-      }
+      const [codeValue, nameValue] = checkedCode.entries().next().value
+      opener.document.querySelector('.codeInput').value = `${codeValue},${nameValue}`;
     }
     // 판매 조회(3개까지)
     if (from === 'search') {
       const parent = window.opener.document.querySelector('.codeList');
       parent.innerHTML = '';
 
-      allCheckboxes.forEach((row) => {
-        if (row.checked) {
-          checkedFlag = true;
-          const targetTr = row.closest('tr');
-          const codeValue = targetTr.querySelectorAll('td')[1].innerText;
-          const nameValue = targetTr.querySelectorAll('td')[2].innerText;
-
-          const dataDiv = document.createElement('div');
-          dataDiv.classList.add('singleSearchedData');
-          dataDiv.innerHTML = `<span>${codeValue}</span> <span>${nameValue}</span> <button class="deleteSearchedData">x</button>`;
-          parent.appendChild(dataDiv);
-        }
-      });
+      for (let [codeValue, nameValue] of checkedCode) {
+        const dataDiv = document.createElement('div');
+        dataDiv.classList.add('singleSearchedData');
+        dataDiv.innerHTML = `<span>${codeValue}</span> <span>${nameValue}</span> <button class="deleteSearchedData">x</button>`;
+        parent.appendChild(dataDiv);
+      }
     }
-    if (checkedFlag) window.close();
-    if (!checkedFlag) alert('체크된 항목이 없습니다');
+
+    window.close();
+
   });
 
   const newButton = document.querySelector('.new');

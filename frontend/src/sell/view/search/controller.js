@@ -56,6 +56,7 @@ export const renderTable = (currentPage) => {
 
   for (let { date, code, number, name, quantity, price, description } of currentPageStateData) {
     const newTr = document.createElement('tr');
+    newTr.setAttribute('data-code', code);
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
                 <td><button class="dateButton">${getDateStringByDate(date)}-${number}</button></td>

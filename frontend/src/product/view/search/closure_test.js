@@ -108,6 +108,7 @@ export const renderTable = (currentPageData) => {
   tbody.innerHTML = "";
   for (let { code, name } of currentPageData) {
     const newTr = document.createElement("tr");
+    newTr.setAttribute('data-code', code);
     const htmlSting = `
                 <td><input type="checkbox" class="checkbox"/></td>
                 <td><button class="codeButton">${code}</button></td>

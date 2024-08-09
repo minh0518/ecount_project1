@@ -1,7 +1,7 @@
 import { sell_item_data } from '../../data/data.js';
 import { getSellDataApi } from '../../service/get.js';
 import { deleteSellDataApi } from '../../service/delete.js';
-import { getDateStringByDate } from '../../../utils/date.js';
+import { getDateStringByDate } from '../../../_utils/date.js';
 
 // 상태
 let currentPage = 1;
